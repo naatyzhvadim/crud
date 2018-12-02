@@ -9,26 +9,26 @@ import javax.validation.Valid
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/employees")
 class EmployeeController(private val employeeRepository: EmployeeRepository) {
 
-    @GetMapping("/employees")
-    fun getAllEmployyes(): List<Employee> = employeeRepository.findAll()
+    @GetMapping("")
+    fun getAllEmployyes(): Iterable<Employee> = employeeRepository.findAll()
 
 
-    @PostMapping("/employees")
+    @PostMapping("")
     fun createNewEmployee(@Valid @RequestBody employee: Employee): Employee =
             employeeRepository.save(employee)
 
 
-    @GetMapping("/employees/{id}")
+    @GetMapping("/{id}")
     fun getEmployeeById(@PathVariable(value = "id") employeeId: Long): ResponseEntity<Employee> {
         return employeeRepository.findById(employeeId).map { employee ->
             ResponseEntity.ok(employee)
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @PutMapping("/employees/{id}")
+    @PutMapping("/{id}")
     fun updateEmployeeById(@PathVariable(value = "id") employeeId: Long,
                           @Valid @RequestBody newEmployee: Employee): ResponseEntity<Employee> {
 
@@ -37,10 +37,10 @@ class EmployeeController(private val employeeRepository: EmployeeRepository) {
                     .copy(first_name = newEmployee.first_name, last_name = newEmployee.last_name, year_of_birth = newEmployee.year_of_birth, year_of_hiring = newEmployee.year_of_hiring)
             ResponseEntity.ok().body(employeeRepository.save(updatedEmployee))
         }.orElse(ResponseEntity.notFound().build())
-        
+
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/{id}")
     fun deleteEmployeeById(@PathVariable(value = "id") employeeId: Long): ResponseEntity<Void> {
 
         return employeeRepository.findById(employeeId).map { employee  ->

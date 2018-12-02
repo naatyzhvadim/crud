@@ -1,0 +1,52 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+</head>
+<body>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Developers database</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Employees</h1>
+<table>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th></th>
+    </tr>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.first_name + ' ' + employee.last_name}"></td>
+        <td>
+            <a th:href="@{/employees/{id}(id=${employee.Eid})}">view</a>
+        </td>
+    </tr>
+</table>
+<hr/>
+<!--
+<form th:action="@{/employees}" method="post" enctype="multipart/form-data">
+    <div>
+        First name: <input name="firstName" />
+    </div>
+    <div>
+        Last name: <input name="lastName" />
+    </div>
+    <div>
+        Email: <input name="email" />
+    </div>
+    <div>
+        <input type="submit" value="Create developer" name="button"/>
+    </div>
+</form>
+-->
+</body>
+</html>
