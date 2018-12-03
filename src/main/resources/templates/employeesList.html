@@ -1,0 +1,63 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+</head>
+<body>
+
+</body>
+</html> -->
+
+
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<!--/*@thymesVar id="employee" type="com.example.database.crud.Employee"*/-->
+<!--/*@thymesVar id="employees" type="java.util.List<Employee>"*/-->
+    <head>
+        <meta charset="UTF-8" />
+        <title>Employees database</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+        <h1>Employees list</h1>
+        <div>
+            <table border="1">
+                <tr>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+                <tr th:each="employee : ${employees}">
+                    <td th:utext="${employee.first_name}">...</td>
+                    <td th:utext="${employee.last_name}">...</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
+<!--<tr th:each="employee : ${employees}">
+    <td th:text="${employee.first_name + ' ' + employee.last_name}"></td>
+    <td>
+        <a th:href="@{/employees/{id}(id=${employee.Eid})}">view</a>
+    </td>
+</tr>
+<hr/>
+<!--
+<form th:action="@{/employees}" method="post" enctype="multipart/form-data">
+    <div>
+        First name: <input name="firstName" />
+    </div>
+    <div>
+        Last name: <input name="lastName" />
+    </div>
+    <div>
+        Email: <input name="email" />
+    </div>
+    <div>
+        <input type="submit" value="Create developer" name="button"/>
+    </div>
+</form>
+
+</body>
+</html>-->

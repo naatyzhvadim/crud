@@ -4,17 +4,41 @@ import com.example.database.crud.Employee
 import com.example.database.crud.repository.EmployeeRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.servlet.ModelAndView
 
 
 @RestController
-@RequestMapping("/api/employees")
+//@RequestMapping("/api/employees")
+@RequestMapping("/api/")
 class EmployeeController(private val employeeRepository: EmployeeRepository) {
 
-    @GetMapping("")
-    fun getAllEmployyes(): Iterable<Employee> = employeeRepository.findAll()
+    @ModelAttribute("employees")
+    fun employees(): List<Employee> {
+        val iter : Iterable<Employee> = employeeRepository.findAll()
+        val iterator : Iterator<Employee> = iter.iterator()
+        val list : List<Employee> = iterator.asSequence().toList()
+        return list
+    }
 
+    @RequestMapping(value = "employees", method = [RequestMethod.GET])
+    fun employes(): ModelAndView {
+        val mav = ModelAndView("employeesList")
+        mav.addObject("employees", employeeRepository.findAll())
+        return mav
+    }
+
+    /*@GetMapping("")
+    fun getAllEmployyes(): Iterable<Employee> = employeeRepository.findAll()*/
+
+    @GetMapping("")
+    fun getAllEmployyes(model : Model): String{
+        model.addAttribute("employees", employeeRepository.findAll())
+        return "employeesList"
+    }
 
     @PostMapping("")
     fun createNewEmployee(@Valid @RequestBody employee: Employee): Employee =
