@@ -59,7 +59,7 @@ class EmployeeController(private val employeeRepository: EmployeeRepository) {
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     fun updateEmployeeById(@PathVariable(value = "id") employeeId: Long,
                           @Valid @RequestBody newEmployee: Employee): ResponseEntity<Employee> {
 
@@ -68,6 +68,13 @@ class EmployeeController(private val employeeRepository: EmployeeRepository) {
                     .copy(first_name = newEmployee.first_name, last_name = newEmployee.last_name, year_of_birth = newEmployee.year_of_birth, year_of_hiring = newEmployee.year_of_hiring)
             ResponseEntity.ok().body(employeeRepository.save(updatedEmployee))
         }.orElse(ResponseEntity.notFound().build())
+
+    }*/
+    @RequestMapping(value = "update/{id}")
+    fun updateEmployeeById(@PathVariable(value = "id") employeeId: Long, model: Model) : String {
+        model.addAttribute("employee", employeeRepository.findById(employeeId))
+        model.addAttribute("employeesList", employeeRepository.findAll())
+        return "api/employees"
 
     }
     @RequestMapping(value = "remove/{id}")
