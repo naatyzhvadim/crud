@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView
 
 
 @Controller
-//@RequestMapping("/api/employees")
 @RequestMapping("/api/")
 class EmployeeController(private val employeeRepository: EmployeeRepository) {
     //test
