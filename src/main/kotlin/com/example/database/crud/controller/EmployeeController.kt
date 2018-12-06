@@ -2,8 +2,10 @@ package com.example.database.crud.controller
 
 import com.example.database.crud.Employee
 import com.example.database.crud.repository.EmployeeRepository
+import com.fasterxml.jackson.core.JsonEncoding
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.servlet.ModelAndView
 
 
-@RestController
+@Controller
 //@RequestMapping("/api/employees")
 @RequestMapping("/api/")
 class EmployeeController(private val employeeRepository: EmployeeRepository) {
@@ -40,9 +42,14 @@ class EmployeeController(private val employeeRepository: EmployeeRepository) {
         return "employeesList"
     }
 
-    @PostMapping("")
-    fun createNewEmployee(@Valid @RequestBody employee: Employee): Employee =
-            employeeRepository.save(employee)
+    //@PostMapping("/create")
+    @RequestMapping(value = "create", method = [RequestMethod.GET])
+    /*fun createNewEmployee(@Valid @RequestBody employee: Employee): Employee =
+            employeeRepository.save(employee)*/
+    fun createNewEmployee(@ModelAttribute("employee") employee : Employee): String{
+        employeeRepository.save(employee)
+        return "redirect:/api/employees"
+    }
 
 
     @GetMapping("/{id}")
@@ -63,13 +70,17 @@ class EmployeeController(private val employeeRepository: EmployeeRepository) {
         }.orElse(ResponseEntity.notFound().build())
 
     }
-
-    @DeleteMapping("/{id}")
+    @RequestMapping(value = "remove/{id}")
+    fun deleteEmployeeById(@PathVariable(value = "id") employeeId: Long): String{
+        employeeRepository.deleteById(employeeId)
+        return "redirect:/api/employees"
+    }
+    /*@DeleteMapping("remove/{id}")
     fun deleteEmployeeById(@PathVariable(value = "id") employeeId: Long): ResponseEntity<Void> {
 
         return employeeRepository.findById(employeeId).map { employee  ->
             employeeRepository.delete(employee)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
-    }
+    }*/
 }

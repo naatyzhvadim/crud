@@ -140,6 +140,10 @@
             vertical-align: middle;
             margin-right: 10px;
         }
+        .pagination {
+            float: right;
+            margin: 0 0 5px;
+        }
         .pagination li a {
             border: none;
             font-size: 13px;
@@ -167,6 +171,15 @@
         .pagination li i {
             font-size: 16px;
             padding-top: 6px
+        }
+        .hint-text {
+            float: left;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        /* Custom checkbox */
+        .custom-checkbox {
+            position: relative;
         }
         .custom-checkbox input[type="checkbox"] {
             opacity: 0;
@@ -248,6 +261,7 @@
             font-weight: normal;
         }
     </style>
+
 </head>
 <body>
 <div class="container">
@@ -282,19 +296,54 @@
                 <td th:utext="${employee.year_of_hiring}"></td>
                 <td th:utext="${employee.manager_id}"></td>
                 <td>
+                    <!--"#deleteEmployeeModal"-->
                     <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    <!--<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>-->
+                    <a th:href="@{remove/{id}(id=${employee.getEid()})}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    <!--<div id="deleteEmployeeModal" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form th:action="@{remove/{id}(id=${employee.getEid()})}">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Delete Employee</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete these Records?</p>
+                                        <p class="text-warning"><small>This action cannot be undone.</small></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input t>
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                        <input type="submit" class="btn btn-danger" value="Delete">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>-->
                 </td>
             </tr>
             </tbody>
         </table>
+        <div class="clearfix">
+            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <ul class="pagination">
+                <li class="page-item disabled"><a href="#">Previous</a></li>
+                <li class="page-item"><a href="#" class="page-link">1</a></li>
+                <li class="page-item"><a href="#" class="page-link">2</a></li>
+                <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                <li class="page-item"><a href="#" class="page-link">4</a></li>
+                <li class="page-item"><a href="#" class="page-link">5</a></li>
+                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 <!-- Edit Modal HTML -->
 <div id="addEmployeeModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form method="GET" action="/api/create">
                 <div class="modal-header">
                     <h4 class="modal-title">Add Employee</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -302,24 +351,24 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>First name</label>
-                        <input type="text" class="form-control" required>
+                        <input name="first_name" type="text" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Last name</label>
-                        <input type="text" class="form-control" required>
+                        <input name="last_name" type="text" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Year of birth</label>
-                        <input type="text" class="form-control" required>
+                        <input name="year_of_birth" type="text" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Year of hiring</label>
-                        <input type="text" class="form-control" required>
+                        <input name="year_of_hiring" type="text" class="form-control" required>
                     </div>
 
                     <div class="form-group">
                         <label>Manager Id</label>
-                        <input type="text" class="form-control" required>
+                        <input name="manager_id" type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -356,7 +405,6 @@
                         <label>Year of hiring</label>
                         <input type="text" class="form-control" required>
                     </div>
-
                     <div class="form-group">
                         <label>Manager Id</label>
                         <input type="text" class="form-control" required>
@@ -371,10 +419,11 @@
     </div>
 </div>
 <!-- Delete Modal HTML -->
+<!--
 <div id="deleteEmployeeModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form th:each="employee : ${employees}" th:action="api/remove/${employee.getEid()}" >
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Employee</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -390,6 +439,6 @@
             </form>
         </div>
     </div>
-</div>
+</div>-->
 </body>
 </html>
