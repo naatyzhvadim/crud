@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView
 //@RequestMapping("/api/employees")
 @RequestMapping("/api/")
 class EmployeeController(private val employeeRepository: EmployeeRepository) {
-
+    //test
     @ModelAttribute("employees")
     fun employees(): List<Employee> {
         val iter : Iterable<Employee> = employeeRepository.findAll()
@@ -82,12 +82,4 @@ class EmployeeController(private val employeeRepository: EmployeeRepository) {
         employeeRepository.deleteById(employeeId)
         return "redirect:/api/employees"
     }
-    /*@DeleteMapping("remove/{id}")
-    fun deleteEmployeeById(@PathVariable(value = "id") employeeId: Long): ResponseEntity<Void> {
-
-        return employeeRepository.findById(employeeId).map { employee  ->
-            employeeRepository.delete(employee)
-            ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
-    }*/
 }
