@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView
 @Controller
 @RequestMapping("/api/")
 class EmployeeController(private val employeeRepository: EmployeeRepository) {
-    //test
     @ModelAttribute("employees")
     fun employees(): List<Employee> {
         val iter : Iterable<Employee> = employeeRepository.findAll()
@@ -58,22 +57,14 @@ class EmployeeController(private val employeeRepository: EmployeeRepository) {
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    /*@PutMapping("/{id}")
-    fun updateEmployeeById(@PathVariable(value = "id") employeeId: Long,
-                          @Valid @RequestBody newEmployee: Employee): ResponseEntity<Employee> {
-
-        return employeeRepository.findById(employeeId).map { existingEmployee ->
+    @RequestMapping(value = "update/{id}", method = [RequestMethod.GET])
+    fun updateEmployeeById(@PathVariable(value = "id") employeeId: Long, newEmployee: Employee) : String {
+        employeeRepository.findById(employeeId).map { existingEmployee ->
             val updatedEmployee: Employee = existingEmployee
-                    .copy(first_name = newEmployee.first_name, last_name = newEmployee.last_name, year_of_birth = newEmployee.year_of_birth, year_of_hiring = newEmployee.year_of_hiring)
-            ResponseEntity.ok().body(employeeRepository.save(updatedEmployee))
-        }.orElse(ResponseEntity.notFound().build())
-
-    }*/
-    @RequestMapping(value = "update/{id}")
-    fun updateEmployeeById(@PathVariable(value = "id") employeeId: Long, model: Model) : String {
-        model.addAttribute("employee", employeeRepository.findById(employeeId))
-        model.addAttribute("employeesList", employeeRepository.findAll())
-        return "api/employees"
+                    .copy(first_name = newEmployee.first_name, last_name = newEmployee.last_name, year_of_birth = newEmployee.year_of_birth, year_of_hiring = newEmployee.year_of_hiring, manager_id = newEmployee.manager_id)
+            employeeRepository.save(updatedEmployee)
+        }
+            return "redirect:/api/employees"
 
     }
     @RequestMapping(value = "remove/{id}")
