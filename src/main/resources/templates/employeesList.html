@@ -20,6 +20,9 @@
             font-family: 'Varela Round', sans-serif;
             font-size: 13px;
         }
+        td a {
+            display: block;
+        }
         .col {
             text-align: left;
         }
@@ -120,6 +123,9 @@
             float: right;
             margin: 0 0 5px;
         }
+        .page-item {
+            cursor: pointer;
+        }
         .pagination li a {
             border: none;
             font-size: 13px;
@@ -131,12 +137,14 @@
             border-radius: 2px !important;
             text-align: center;
             padding: 0 6px;
+            cursor: pointer;
         }
         .pagination li a:hover {
             color: #666;
         }
         .pagination li.active a, .pagination li.active a.page-link {
             background: #03A9F4;
+            cursor: pointer;
         }
         .pagination li.active a:hover {
             background: #0397d6;
@@ -265,7 +273,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="employee : ${employees}">
+            <tr th:each="employee : ${employees.getContent()}">
                 <td class="col" th:utext="${employee.getEid()}"></td>
                 <td class="col" th:utext="${employee.first_name}"></td>
                 <td class="col" th:utext="${employee.last_name}"></td>
@@ -295,11 +303,10 @@
                             </div>
                         </div>
                     </div>
-
                     <div th:id="${employee.getEid()}" class="modal fade">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form th:action="@{update/{id}(id=${employee.getEid()})}" method="GET">
+                                <form th:action="@{update/{id}(id=${employee.getEid()})}" method="POST">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Edit Employee</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -340,15 +347,10 @@
             </tbody>
         </table>
         <div class="clearfix">
-            <div class="hint-text">Showing <b>5</b> out of <b th:utext="${employees.size() }"></b> entries</div>
             <ul class="pagination">
-                <li class="page-item disabled"><a href="#">Previous</a></li>
-                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, employees.totalPages - 1)}" th:classappend="${currentPage}==${i}?'active':'disabled'">
+                    <a th:href="@{/(page=${i})}" th:text="${i}" class="page-link"></a>
+                </li>
             </ul>
         </div>
     </div>
@@ -356,7 +358,7 @@
 <div id="addEmployeeModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="GET" action="/api/create">
+            <form method="POST" action="/create">
                 <div class="modal-header">
                     <h4 class="modal-title">Add Employee</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
